@@ -1,0 +1,48 @@
+ $("body").on("click", ".edit_size a", function (event)
+    {
+        event.preventDefault();
+
+        var id = $(this)
+            .parents("tr")
+            .attr("data-id");
+        var size_type = $(this)
+            .parents("td")
+            .find(".size_view")
+            .attr("data-prop");
+        if (
+            $(this)
+                .parents("tr")
+                .hasClass("new-item")
+        )
+        {
+            id = "new";
+        }
+        $("#in_form_size_edit").html("Загрузка...");
+        $("#in_form_size_edit").load(
+            ajaxPath + "/editSize.php",
+            { id: id, iblock: siteIblock },
+            function ()
+            {
+                if (id != "new")
+                {
+                    if (size_type != "ALL_SIZE")
+                        $(
+                            "#in_form_size_edit .nav-tabs li a[data-size_type=" +
+                            size_type +
+                            "]"
+                        ).click();
+                    let arr = edit_item_val.split(",");
+                    $.each(arr, function (index, value)
+                    {
+                        $(
+                            '#in_form_size_edit .tab-pane[data-size_type="' +
+                            size_type +
+                            '"] input[value="' +
+                            value +
+                            '"]'
+                        ).prop("checked", true);
+                    });
+                }
+            }
+        );
+    });
